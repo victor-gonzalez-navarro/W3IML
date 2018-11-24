@@ -18,8 +18,8 @@ class KnnClassifier():
         self.trn_labels = labels
 
     def classify(self, tst_data):
-        tst_labels = np.zeros((tst_data.shape[0], 1))
+        self.tst_labels = np.zeros((tst_data.shape[0], 1))
         for i in range(tst_data.shape[0]):
             neighbor_idxs = np.argpartition([self.d(tst_data[1,:], trn_sample) for trn_sample in self.trn_data], kth=self.k)[:self.k]
             labels, counts = np.unique(self.trn_labels[neighbor_idxs], return_counts=True)
-            tst_labels[i] = labels[np.argmax(counts)]
+            self.tst_labels[i] = labels[np.argmax(counts)]
