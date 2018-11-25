@@ -82,7 +82,8 @@ def main():
 
         accuracies.append((sum([a == b for a, b in zip(tst_labels, knn.tst_labels)]))/len(tst_labels))
 
-    print('The accuracy of classification is: ' + str(np.mean(accuracies)) + ' ± ' + str(round(np.std(accuracies),2)))
+    print('The accuracy of classification is: ' + str(round(np.mean(accuracies),3)) + ' ± ' + str(round(np.std(
+        accuracies),2)))
 
 
 
