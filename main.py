@@ -8,12 +8,13 @@ from scipy.io import arff
 
 from preproc.preprocess import Preprocess
 from algorithms.knnclassifier import KnnClassifier
+from algorithms.ib1Algorithm import ib1Algorithm
 from sklearn.preprocessing.label import LabelEncoder
 
 
 # ------------------------------------------------------------------------------------------------------- Read databases
 def obtain_arffs(path):
-    # Read all the databases
+    # Read all the datasets
     processed = []
     arffs_dic = {}
     folds_dic = {}
@@ -35,15 +36,14 @@ def obtain_arffs(path):
 def trn_tst_idxs(ref_data, dataset):
     trn_tst_dic = {}
     for key, fold_data in dataset.items():
+        a = fold_data[0]
+        b = fold_data[1]
         trn_idxs = [np.where(ref_data == sample)[0][0] for sample in fold_data[0]]
         tst_idxs = [np.where(ref_data == sample)[0][0] for sample in fold_data[1]]
         trn_tst_dic[key] = []
         trn_tst_dic[key].append(trn_idxs)
         trn_tst_dic[key].append(tst_idxs)
     return trn_tst_dic
-
-# ------------------------------------------------------------------------------------------------------------Algorithms
-
 
 # ----------------------------------------------------------------------------------------------------------------- Main
 def main():
@@ -61,14 +61,17 @@ def main():
     groundtruth_labels = df1[df1.columns[len(df1.columns) - 1]].values  # original labels in a numpy array
     df1 = df1.drop(df1.columns[len(df1.columns) - 1], 1)
 
+    # ------------------------------------------------------------------------------------------------------- Preprocess
     data1 = df1.values  # original data in a numpy array without labels
     load = Preprocess()
     data_x = load.preprocess_method(data1)
 
+    # ---------------------------------------------------------------------------------------- Encode groundtruth labels
     le = LabelEncoder()
     le.fit(np.unique(groundtruth_labels))
     groundtruth_labels = le.transform(groundtruth_labels)
 
+    # -------------------------------------------------------------------------------------------- Supervised classifier
     accuracies = []
     for trn_idxs, tst_idxs in trn_tst_dic.values():
         trn_data = data_x[trn_idxs]
@@ -82,7 +85,7 @@ def main():
 
         accuracies.append(sum([a == b for a, b in zip(tst_labels, knn.tst_labels)]))
 
-    print('The accuracy of classification is: ' + str(np.mean(accuracies)) + ' ± ' + str(np.std(accuracies)))
+    print('The accuracy of classification is: ' + str(np.mean(accuracies)) + ' ± ' + str(round(np.std(accuracies),2)))
 
 
 
