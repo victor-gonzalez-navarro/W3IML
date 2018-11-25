@@ -7,7 +7,6 @@ import numpy as np
 from scipy.io import arff
 
 from preproc.preprocess import Preprocess
-from algorithms.knnclassifier import KnnClassifier
 from algorithms.ib1Algorithm import ib1Algorithm
 from sklearn.preprocessing.label import LabelEncoder
 
@@ -77,14 +76,11 @@ def main():
         tst_data = data_x[tst_idxs]
         tst_labels = groundtruth_labels[tst_idxs]
 
-        # knn = KnnClassifier(k=1, metric='euclidean')
-        # knn.fit(trn_data, trn_labels)
-        # knn.classify(tst_data)
         knn = ib1Algorithm(k=1, metric='euclidean')
         knn.fit(trn_data, trn_labels)
         knn.classify(tst_data)
 
-        accuracies.append(sum([a == b for a, b in zip(tst_labels, knn.tst_labels)]))
+        accuracies.append((sum([a == b for a, b in zip(tst_labels, knn.tst_labels)]))/len(tst_labels))
 
     print('The accuracy of classification is: ' + str(np.mean(accuracies)) + ' ± ' + str(round(np.std(accuracies),2)))
 
