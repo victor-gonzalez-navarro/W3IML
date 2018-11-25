@@ -36,8 +36,6 @@ def obtain_arffs(path):
 def trn_tst_idxs(ref_data, dataset):
     trn_tst_dic = {}
     for key, fold_data in dataset.items():
-        a = fold_data[0]
-        b = fold_data[1]
         trn_idxs = [np.where(ref_data == sample)[0][0] for sample in fold_data[0]]
         tst_idxs = [np.where(ref_data == sample)[0][0] for sample in fold_data[1]]
         trn_tst_dic[key] = []
@@ -79,7 +77,10 @@ def main():
         tst_data = data_x[tst_idxs]
         tst_labels = groundtruth_labels[tst_idxs]
 
-        knn = KnnClassifier(k=1, metric='euclidean')
+        # knn = KnnClassifier(k=1, metric='euclidean')
+        # knn.fit(trn_data, trn_labels)
+        # knn.classify(tst_data)
+        knn = ib1Algorithm(k=1, metric='euclidean')
         knn.fit(trn_data, trn_labels)
         knn.classify(tst_data)
 
@@ -89,7 +90,7 @@ def main():
 
 
 
-    print('Finished')
+    print('The algorithm has finished successfully')
     '''
     df1 = pd.DataFrame(dat1[0])     # original data in pandas dataframe
     groundtruth_labels = df1[df1.columns[len(df1.columns)-1]].values  # original labels in a numpy array

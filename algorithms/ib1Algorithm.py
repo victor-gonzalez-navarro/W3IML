@@ -14,8 +14,16 @@ class ib1Algorithm():
             self.d = euclidean
 
     def fit(self, trn_data, labels):
-        self.trn_data = trn_data
-        self.trn_labels = labels
+        trn_data_keep = trn_data[0,:].reshape(1,len(trn_data[0,:]))
+        labels_keep = np.array(labels[0]).reshape(1)
+        for j in range(1,trn_data.shape[0]):
+            trn_data_concat = trn_data[j,:].reshape(1,len(trn_data[j,:]))
+            trn_data_keep = np.concatenate((trn_data_keep,trn_data_concat),axis=0)
+            labels_keep = np.concatenate((labels_keep, np.array(labels[j]).reshape(1)))
+        self.trn_data = trn_data_keep
+        self.trn_labels = labels_keep
+
+
 
     def classify(self, tst_data):
         self.tst_labels = np.zeros((tst_data.shape[0], 1))
