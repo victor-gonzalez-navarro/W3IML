@@ -16,15 +16,28 @@ class ib3Algorithm():
     def fit(self, trn_data, labels):
         trn_data_keep = trn_data[0,:].reshape(1,len(trn_data[0,:]))
         labels_keep = np.array(labels[0]).reshape(1)
+        classi_list = [[0]]
         for j in range(1,trn_data.shape[0]):
             neighbor = np.argpartition([self.d(trn_data[j,:], trn_sample) for trn_sample in trn_data_keep], kth=0)[:1]
             if labels[j] != labels_keep[neighbor]:
                 trn_data_concat = trn_data[j,:].reshape(1,len(trn_data[j,:]))
                 trn_data_keep = np.concatenate((trn_data_keep,trn_data_concat),axis=0)
                 labels_keep = np.concatenate((labels_keep, np.array(labels[j]).reshape(1)))
-            for m in range(trn_data_keep.shape[0]):
-                distances = [self.d(trn_data[j, :], samp) for samp in trn_data_keep[[x for x in range(trn_data_keep.shape[0]) if x !=m],:]]
-                neighbor = np.argpartition(distances, kth=0)[:1]
+                classi_list.append([0])
+            if len(labels_keep) > 1:
+                for m in range(trn_data_keep.shape[0]):
+                    valid_idxs = [x for x in range(trn_data_keep.shape[0]) if x !=m]
+                    distances = [self.d(trn_data_keep[m, :], samp) for samp in trn_data_keep[valid_idxs,:]]
+                    neighbor = np.argpartition(distances, kth=0)[:1]
+                    classi_list[m].append(int(labels_keep[m] == labels_keep[neighbor]))
+
+        remove_idxs = []
+        for m in range(trn_data_keep.shape[0]):
+            if np.mean(classi_list[m]) < 0.25:
+                remove_idxs.append(m)
+        trn_data_keep = np.delete(trn_data_keep, remove_idxs, axis=0)
+        labels_keep = np.delete(labels_keep, remove_idxs, axis=0)
+
         self.trn_data = trn_data_keep
         self.trn_labels = labels_keep
 
