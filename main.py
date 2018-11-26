@@ -13,7 +13,7 @@ from algorithms.ib3Algorithm import ib3Algorithm
 from sklearn.preprocessing.label import LabelEncoder
 
 
-# ------------------------------------------------------------------------------------------------------- Read databases
+# -------------------------------------------------------------------------------------------------------- Read datasets
 def obtain_arffs(path):
     # Read all the datasets
     processed = []
@@ -86,27 +86,7 @@ def main():
 
     print('The accuracy of classification is: ' + str(round(np.mean(accuracies),3)) + ' ± ' + str(round(np.std(
         accuracies),2)))
-
-
-
     print('The algorithm has finished successfully')
-    '''
-    df1 = pd.DataFrame(dat1[0])     # original data in pandas dataframe
-    groundtruth_labels = df1[df1.columns[len(df1.columns)-1]].values  # original labels in a numpy array
-    df1 = df1.drop(df1.columns[len(df1.columns)-1],1)
-
-    data1 = df1.values              # original data in a numpy array without labels
-    load = Preprocess()
-    data_x = load.preprocess_method(data1)
-    #data_x = data_x.astype(np.float64)
-
-    le = LabelEncoder()
-    le.fit(np.unique(groundtruth_labels))
-    groundtruth_labels = le.transform(groundtruth_labels)
-    num_clusters = len(np.unique(groundtruth_labels)) # Number of different labels
-    '''
-
-
 
 # ----------------------------------------------------------------------------------------------------------------- Init
 if __name__ == '__main__':
