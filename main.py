@@ -8,6 +8,7 @@ from scipy.io import arff
 
 from preproc.preprocess import Preprocess
 from algorithms.ib1Algorithm import ib1Algorithm
+from algorithms.ib2Algorithm import ib2Algorithm
 from sklearn.preprocessing.label import LabelEncoder
 
 
@@ -76,7 +77,7 @@ def main():
         tst_data = data_x[tst_idxs]
         tst_labels = groundtruth_labels[tst_idxs]
 
-        knn = ib1Algorithm(k=1, metric='euclidean')
+        knn = ib2Algorithm(k=1, metric='euclidean')
         knn.fit(trn_data, trn_labels)
         knn.classify(tst_data)
 

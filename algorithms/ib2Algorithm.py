@@ -2,7 +2,7 @@ from algorithms.distances import euclidean
 import numpy as np
 
 
-class ib1Algorithm():
+class ib2Algorithm():
 
     trn_data = None
     trn_labels = None
@@ -17,9 +17,11 @@ class ib1Algorithm():
         trn_data_keep = trn_data[0,:].reshape(1,len(trn_data[0,:]))
         labels_keep = np.array(labels[0]).reshape(1)
         for j in range(1,trn_data.shape[0]):
-            trn_data_concat = trn_data[j,:].reshape(1,len(trn_data[j,:]))
-            trn_data_keep = np.concatenate((trn_data_keep,trn_data_concat),axis=0)
-            labels_keep = np.concatenate((labels_keep, np.array(labels[j]).reshape(1)))
+            neighbor = np.argpartition([self.d(trn_data[j,:], trn_sample) for trn_sample in trn_data_keep], kth=0)[:1]
+            if labels[j] != labels_keep[neighbor]:
+                trn_data_concat = trn_data[j,:].reshape(1,len(trn_data[j,:]))
+                trn_data_keep = np.concatenate((trn_data_keep,trn_data_concat),axis=0)
+                labels_keep = np.concatenate((labels_keep, np.array(labels[j]).reshape(1)))
         self.trn_data = trn_data_keep
         self.trn_labels = labels_keep
 
