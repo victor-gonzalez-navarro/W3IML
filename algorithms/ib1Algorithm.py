@@ -23,8 +23,6 @@ class ib1Algorithm():
         self.trn_data = trn_data_keep
         self.trn_labels = labels_keep
 
-
-
     def classify(self, tst_data):
         self.tst_labels = np.zeros((tst_data.shape[0], 1))
         for i in range(tst_data.shape[0]):
