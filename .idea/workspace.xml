@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="866ccea6-4b2d-4136-8e2c-e12b05ec5cb0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/algorithms/ib1Algorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms/ib1Algorithm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,11 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/algorithms/ib1Algorithm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="32" column="56" selection-start-line="32" selection-start-column="56" selection-end-line="32" selection-end-column="56" />
+            <state relative-caret-position="585">
+              <caret line="39" column="112" selection-start-line="39" selection-start-column="112" selection-end-line="39" selection-end-column="112" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
               </folding>
@@ -85,7 +84,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/algorithms/ib3Algorithm.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="375">
@@ -135,10 +134,10 @@
       <list>
         <option value="$PROJECT_DIR$/algorithms/distances.py" />
         <option value="$PROJECT_DIR$/algorithms/knnclassifier.py" />
-        <option value="$PROJECT_DIR$/algorithms/ib1Algorithm.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/algorithms/ib2Algorithm.py" />
         <option value="$PROJECT_DIR$/algorithms/ib3Algorithm.py" />
+        <option value="$PROJECT_DIR$/algorithms/ib1Algorithm.py" />
       </list>
     </option>
   </component>
@@ -341,16 +340,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algorithms/ib1Algorithm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="56" selection-start-line="32" selection-start-column="56" selection-end-line="32" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
@@ -372,6 +361,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="26" column="64" lean-forward="true" selection-start-line="26" selection-start-column="64" selection-end-line="26" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algorithms/ib1Algorithm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="39" column="112" selection-start-line="39" selection-start-column="112" selection-end-line="39" selection-end-column="112" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
