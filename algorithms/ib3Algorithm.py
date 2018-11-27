@@ -13,33 +13,86 @@ class ib3Algorithm():
         if metric == 'euclidean':
             self.d = euclidean
 
+    z90 = 1.645
+
+    def get_accepted_ys(self, labels_count, incorrect_labels, accuracies, num_processed):
+        accepted_idx = []
+
+        for index in range(len(incorrect_labels)):
+            accuracy = accuracies[index]
+            label_freq = labels_count[incorrect_labels[index]] / num_processed
+
+            limit_conf_accu = np.sqrt(accuracy * (1 - accuracy) / 100)
+            limit_conf_freq = np.sqrt(label_freq * (1 - label_freq) / 100)
+
+            if (accuracy - limit_conf_accu) > (label_freq + limit_conf_freq):
+                accepted_idx.append(index)
+
+        return accepted_idx
+
+    def is_rejected_y(self, labels_count, incorrect_labels, accuracy, num_processed, index):
+
+        label_freq = labels_count[incorrect_labels[index]] / num_processed
+        limit_conf_accu = np.sqrt(accuracy * (1 - accuracy) / 100)
+        limit_conf_freq = np.sqrt(label_freq * (1 - label_freq) / 100)
+
+        if (accuracy + limit_conf_accu) < (label_freq - limit_conf_freq):
+            return True
+
+        return False
+
     def fit(self, trn_data, labels):
-        trn_data_keep = trn_data[0,:].reshape(1,len(trn_data[0,:]))
+        # First Iteration
+        trn_data_keep = trn_data[0, :].reshape(1, len(trn_data[0, :]))
         labels_keep = np.array(labels[0]).reshape(1)
         classi_list = [[0]]
-        for j in range(1,trn_data.shape[0]):
-            neighbor = np.argpartition([self.d(trn_data[j,:], trn_sample) for trn_sample in trn_data_keep], kth=0)[:1]
+
+        labels_count = {}
+        for label in np.unique(labels):
+            labels_count[label] = 0
+
+        for j in range(1, trn_data.shape[0]):
+            # Step 1: Obtain the similarities with each sample at the Content Description
+            similarities = [-self.d(trn_data[j, :], trn_sample) for trn_sample in trn_data_keep]
+
+            labels_count[label] += 1
+
+            # Step 2: Check that there are acceptable samples at the Content Description based on similarity scores
+            accepted_ys = self.get_accepted_ys(labels_count, labels_keep, [np.mean(sample) for sample in
+                                                                           classi_list], j)
+
+            if (len(accepted_ys) > 0):
+                neighbor = np.argmax(similarities[accepted_ys])
+            else:
+                # Step 2.1: randomly select a number in the range between 1 and the length of the Content Description
+                ith = np.random.random_integers(1, len(trn_data_keep))
+
+                # Step 2.2: Select the ith most similar value to X in the content description
+                neighbor = np.argsort(similarities)[-ith]
+
+            # Step 3: If classification is incorrect, add it to the Content Description
+            # Note: Is there an error
             if labels[j] != labels_keep[neighbor]:
-                trn_data_concat = trn_data[j,:].reshape(1,len(trn_data[j,:]))
-                trn_data_keep = np.concatenate((trn_data_keep,trn_data_concat),axis=0)
+                pass
+            else:
+                trn_data_concat = trn_data[j, :].reshape(1, len(trn_data[j, :]))
+                trn_data_keep = np.concatenate((trn_data_keep, trn_data_concat), axis=0)
                 labels_keep = np.concatenate((labels_keep, np.array(labels[j]).reshape(1)))
-                classi_list.append([0])
-            if len(labels_keep) > 1:
-                for m in range(trn_data_keep.shape[0]):
-                    valid_idxs = [x for x in range(trn_data_keep.shape[0]) if x !=m]
-                    distances = [self.d(trn_data_keep[m, :], samp) for samp in trn_data_keep[valid_idxs,:]]
-                    neighbor = np.argpartition(distances, kth=0)[:1]
-                    classi_list[m].append(int(labels_keep[m] == labels_keep[neighbor]))
 
-        remove_idxs = []
-        for m in range(trn_data_keep.shape[0]):
-            if np.mean(classi_list[m]) < 0.25:
-                remove_idxs.append(m)
-        trn_data_keep = np.delete(trn_data_keep, remove_idxs, axis=0)
-        labels_keep = np.delete(labels_keep, remove_idxs, axis=0)
+            # Step 4: For each sample in the Content Description:
+            for m in range(trn_data_keep.shape[0]):
+                if similarities[m] >= similarities[neighbor]:
+                    # Step 4.1: Update y's classification record
+                    if labels[j] == labels_keep[m]:
+                        classi_list[m].append(1)
+                    else:
+                        classi_list[m].append(0)
 
-        self.trn_data = trn_data_keep
-        self.trn_labels = labels_keep
+                    # Step 4.2: If record is poor
+                    if self.is_rejected_y(labels_count, labels_keep, np.mean(classi_list[m]), j, m):
+                        classi_list.pop(m)
+                        trn_data_keep = np.delete(trn_data_keep, m, axis=0)
+                        labels_keep = np.delete(labels_keep, m, axis=0)
 
 
 
