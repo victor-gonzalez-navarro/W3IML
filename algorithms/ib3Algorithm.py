@@ -7,7 +7,7 @@ class ib3Algorithm():
     trn_data = None
     trn_labels = None
     tst_labels = None
-    z = 2.58   # z90 = 1.645
+    z = 1.645   # z90 = 1.645
 
     def __init__(self, k=1, metric='euclidean'):
         self.k = k
@@ -45,7 +45,7 @@ class ib3Algorithm():
         # First Iteration
         trn_data_keep = trn_data[0, :].reshape(1, len(trn_data[0, :]))
         labels_keep = np.array(labels[0]).reshape(1)
-        classi_list = [[0]]
+        classi_list = [[1]]
 
         labels_count = {}
         for label in np.unique(labels):
@@ -56,17 +56,17 @@ class ib3Algorithm():
             # Step 1: Obtain the similarities with each sample at the Content Description
             similarities = [-self.d(trn_data[j, :], trn_sample) for trn_sample in trn_data_keep]
 
-            labels_count[label] += 1
+            labels_count[labels[j]] += 1
 
             # Step 2: Check that there are acceptable samples at the Content Description based on similarity scores
-            accepted_ys = self.get_accepted_ys(labels_count, labels_keep, [np.mean(sample) for sample in
-                                                                           classi_list], j)
+            accepted_ys = self.get_accepted_ys(labels_count, labels_keep,
+                                               [np.mean(sample) for sample in classi_list], j)
 
-            if (len(accepted_ys) > 0):
+            if len(accepted_ys) > 0:
                 if len(accepted_ys) == 1:
                     neighbor = accepted_ys[0]
                 else:
-                    neighbor = accepted_ys[np.argmax(similarities[accepted_ys])]
+                    neighbor = accepted_ys[np.argmax([similarities[y] for y in accepted_ys])]
             else:
                 # Step 2.1: randomly select a number in the range between 1 and the length of the Content Description
                 ith = np.random.random_integers(1, len(trn_data_keep))
@@ -96,6 +96,7 @@ class ib3Algorithm():
                     # Step 4.2: If record is poor
                     if self.is_rejected_y(labels_count, labels_keep, np.mean(classi_list[m]), j, m):
                         remove_idx.append(m)
+                        pass
 
             for m in sorted(remove_idx, reverse=True):
                 classi_list.pop(m)
@@ -105,7 +106,6 @@ class ib3Algorithm():
         self.trn_data = trn_data_keep
         self.trn_labels = labels_keep
         print(str(len(trn_data_keep)))
-        print(str(len(labels_keep)))
 
 
 
