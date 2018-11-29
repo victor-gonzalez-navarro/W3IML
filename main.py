@@ -89,7 +89,6 @@ def main():
 
     print('\n'+'\033[1m'+'The mean accuracy of classification in the test set is: ' + str(round(np.mean(accuracies),
         3)) + ' ± ' + str(round(np.std(accuracies),2))+'\033[0m')
-    print('The algorithm has finished successfully')
 
 # ----------------------------------------------------------------------------------------------------------------- Init
 if __name__ == '__main__':

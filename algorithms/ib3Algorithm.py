@@ -59,8 +59,14 @@ class ib3Algorithm():
             labels_count[labels[j]] += 1
 
             # Step 2: Check that there are acceptable samples at the Content Description based on similarity scores
-            accepted_ys = self.get_accepted_ys(labels_count, labels_keep,
-                                               [np.mean(sample) for sample in classi_list], j)
+            mean_sample = []
+            for sample in classi_list:
+                if (len(sample) > 0):
+                    mean_sample.append(np.mean(sample))
+                else:
+                    mean_sample.append(0)
+
+            accepted_ys = self.get_accepted_ys(labels_count, labels_keep, mean_sample, j)
 
             if len(accepted_ys) > 0:
                 if len(accepted_ys) == 1:
