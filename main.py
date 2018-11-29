@@ -72,7 +72,10 @@ def main():
 
     # -------------------------------------------------------------------------------------------- Supervised classifier
     accuracies = []
+    fold_number = 0;
     for trn_idxs, tst_idxs in trn_tst_dic.values():
+        fold_number = fold_number +1
+        print('Computing accuracy for fold number '+str(fold_number))
         trn_data = data_x[trn_idxs]
         trn_labels = groundtruth_labels[trn_idxs]
         tst_data = data_x[tst_idxs]
@@ -84,8 +87,8 @@ def main():
 
         accuracies.append((sum([a == b for a, b in zip(tst_labels, knn.tst_labels)]))/len(tst_labels))
 
-    print('The accuracy of classification is: ' + str(round(np.mean(accuracies),3)) + ' ± ' + str(round(np.std(
-        accuracies),2)))
+    print('\n'+'\033[1m'+'The mean accuracy of classification in the test set is: ' + str(round(np.mean(accuracies),
+        3)) + ' ± ' + str(round(np.std(accuracies),2))+'\033[0m')
     print('The algorithm has finished successfully')
 
 # ----------------------------------------------------------------------------------------------------------------- Init

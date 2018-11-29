@@ -105,7 +105,6 @@ class ib3Algorithm():
 
         self.trn_data = trn_data_keep
         self.trn_labels = labels_keep
-        print(str(len(trn_data_keep)))
 
 
 
