@@ -87,8 +87,9 @@ def main():
 
         accuracies.append((sum([a == b for a, b in zip(tst_labels, knn.tst_labels)]))/len(tst_labels))
 
-    print('\n'+'\033[1m'+'The mean accuracy of classification in the test set is: ' + str(round(np.mean(accuracies),
-        3)) + ' ± ' + str(round(np.std(accuracies),2))+'\033[0m')
+    mean_accuracies = str(round(np.mean(accuracies),3))
+    std_accuracies = str(round(np.std(accuracies),2))
+    print('\033[1m'+'The mean accuracy of classification in the test set is: ' + mean_accuracies + ' ± ' + std_accuracies+'\033[0m')
 
 # ----------------------------------------------------------------------------------------------------------------- Init
 if __name__ == '__main__':
