@@ -72,7 +72,7 @@ def main():
 
     # -------------------------------------------------------------------------------------------- Supervised classifier
     accuracies = []
-    fold_number = 0;
+    fold_number = 0
     for trn_idxs, tst_idxs in trn_tst_dic.values():
         fold_number = fold_number +1
         print('Computing accuracy for fold number '+str(fold_number))
