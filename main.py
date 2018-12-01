@@ -86,7 +86,6 @@ def main():
     le.fit(np.unique(groundtruth_labels))
     groundtruth_labels = le.transform(groundtruth_labels)
 
-    # -------------------------------------------------------------------------------------------- Supervised classifier
     accuracies = []
     fold_number = 0
 
@@ -95,12 +94,22 @@ def main():
     k = int(input('Insert a number between 1-10: '))
     print('\n'+'\033[1m'+'Which distance function do you want to use?'+'\033[0m'+'\n1: Euclidean\n2: Manhattan')
     dist = int(input('Insert a number between 1-2: '))
-    print('')
     if dist == 1:
         metric = 'euclidean'
     elif dist == 2:
         metric = 'manhattan'
+    print('\n'+'\033[1m'+'Which voting policy do you want to use?'+'\033[0m'+'\n1: Most voted solution\n2: Modified '
+                                                                             'Plurality\n3: Borda Count')
+    voting_policy = int(input('Insert a number between 1-3: '))
+    print('')
+    if voting_policy == 1:
+        voting_policy = 'most_voted'
+    elif voting_policy == 2:
+        voting_policy = 'modified_plurality'
+    elif voting_policy == 3:
+        voting_policy = 'borda_count'
 
+    # -------------------------------------------------------------------------------------------- Supervised classifier
     for trn_idxs, tst_idxs in trn_tst_dic.values():
         fold_number = fold_number +1
         print('Computing accuracy for fold number '+str(fold_number))
@@ -109,7 +118,7 @@ def main():
         tst_data = data_x[tst_idxs]
         tst_labels = groundtruth_labels[tst_idxs]
 
-        knn = ib2Algorithm(k, metric)
+        knn = ib2Algorithm(k, metric, voting_policy)
         knn.fit(trn_data, trn_labels)
         knn.classify(tst_data)
 

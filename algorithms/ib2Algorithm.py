@@ -2,6 +2,11 @@ import numpy as np
 
 from algorithms.distances import euclidean
 from algorithms.distances import manhattan
+from algorithms.voting_policies import most_voted
+from algorithms.voting_policies import modified_plurality
+from algorithms.voting_policies import borda_count
+
+
 
 class ib2Algorithm():
 
@@ -9,12 +14,18 @@ class ib2Algorithm():
     trn_labels = None
     tst_labels = None
 
-    def __init__(self, k=1, metric='euclidean'):
+    def __init__(self, k=1, metric='euclidean', voting_policy = 'most_voted'):
         self.k = k
         if metric == 'euclidean':
             self.d = euclidean
         elif metric == 'manhattan':
             self.d = manhattan
+        if voting_policy == 'most_voted':
+            self.vp = most_voted
+        elif voting_policy == 'modified_plurality':
+            self.vp = modified_plurality
+        elif voting_policy == 'borda_count':
+            self.vp = borda_count
 
     def fit(self, trn_data, labels):
         trn_data_keep = trn_data[0,:].reshape(1,len(trn_data[0,:]))
@@ -37,4 +48,4 @@ class ib2Algorithm():
             neighbor_idxs = np.argpartition([self.d(tst_data[i,:], trn_sample) for trn_sample in self.trn_data],
                                             kth=self.k-1)[:self.k]
             labels, counts = np.unique(self.trn_labels[neighbor_idxs], return_counts=True)
-            self.tst_labels[i] = labels[np.argmax(counts)]
+            self.tst_labels[i] = self.vp(labels, counts)
