@@ -5,3 +5,6 @@ def euclidean(a, b):
 
 def euclidean2(a, b):
     return np.sqrt(np.sum((a-b)**2))
+
+def manhattan(a, b):
+    return np.sqrt(np.sum(abs(a - b)))

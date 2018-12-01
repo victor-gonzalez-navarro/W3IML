@@ -73,6 +73,18 @@ def main():
     # -------------------------------------------------------------------------------------------- Supervised classifier
     accuracies = []
     fold_number = 0
+
+    # ---------------------------------------------------------------- Reading K value and distance metric from keyboard
+    print('\n'+'\033[1m'+'Which K value do you want to use?'+'\033[0m')
+    k = int(input('Insert a number between 1-10: '))
+    print('\n'+'\033[1m'+'Which distance function do you want to use?'+'\033[0m'+'\n1: Euclidean\n2: Manhattan')
+    dist = int(input('Insert a number between 1-2: '))
+    print('')
+    if dist == 1:
+        metric = 'euclidean'
+    elif dist == 2:
+        metric = 'manhattan'
+
     for trn_idxs, tst_idxs in trn_tst_dic.values():
         fold_number = fold_number +1
         print('Computing accuracy for fold number '+str(fold_number))
@@ -81,7 +93,7 @@ def main():
         tst_data = data_x[tst_idxs]
         tst_labels = groundtruth_labels[tst_idxs]
 
-        knn = ib3Algorithm(k=1, metric='euclidean')
+        knn = ib2Algorithm(k, metric)
         knn.fit(trn_data, trn_labels)
         knn.classify(tst_data)
 

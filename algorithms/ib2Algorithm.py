@@ -1,6 +1,7 @@
-from algorithms.distances import euclidean
 import numpy as np
 
+from algorithms.distances import euclidean
+from algorithms.distances import manhattan
 
 class ib2Algorithm():
 
@@ -12,6 +13,8 @@ class ib2Algorithm():
         self.k = k
         if metric == 'euclidean':
             self.d = euclidean
+        elif metric == 'manhattan':
+            self.d = manhattan
 
     def fit(self, trn_data, labels):
         trn_data_keep = trn_data[0,:].reshape(1,len(trn_data[0,:]))
