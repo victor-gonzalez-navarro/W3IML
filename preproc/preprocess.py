@@ -26,23 +26,23 @@ class Preprocess:
                         data[sample, feature] = (data[sample, feature] - min_v) / (max_v - min_v)
 
             # Categorical Features
-            if type(data[0, feature]) is bytes:
+            #if type(data[0, feature]) is bytes:
 
-                # Calculate the mode of this feature
-                cat_values = np.unique(data[:, feature])
-                moda = max(cat_values, key=lambda x: data[:,feature].tolist().count(x))
+            #   # Calculate the mode of this feature
+            #   cat_values = np.unique(data[:, feature])
+            #   moda = max(cat_values, key=lambda x: data[:,feature].tolist().count(x))
 
-                # Assign the mode to NaNs
-                cond_nan = np.where(data[:, feature] == '?'.encode('utf8'))
-                data[cond_nan, feature] = moda
+            #   # Assign the mode to NaNs
+            #   cond_nan = np.where(data[:, feature] == '?'.encode('utf8'))
+            #   data[cond_nan, feature] = moda
 
-                # OneHotEncoding
-                data1 = np.array(pd.get_dummies(data[:,feature]))
-                data = np.concatenate((data, data1), axis=1)
+            #   # OneHotEncoding
+            #   data1 = np.array(pd.get_dummies(data[:,feature]))
+            #   data = np.concatenate((data, data1), axis=1)
 
-                features_del.append(feature)
+            #   features_del.append(feature)
 
         # Delete categorical feature
-        data = np.delete(data, features_del, 1)
+        #data = np.delete(data, features_del, 1)
 
         return data

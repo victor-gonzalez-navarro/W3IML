@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import math
 
 import pandas as pd
 import numpy as np
@@ -36,9 +37,19 @@ def obtain_arffs(path):
 
 def trn_tst_idxs(ref_data, dataset):
     trn_tst_dic = {}
+
     for key, fold_data in dataset.items():
-        trn_idxs = [np.where(ref_data == sample)[0][0] for sample in fold_data[0]]
-        tst_idxs = [np.where(ref_data == sample)[0][0] for sample in fold_data[1]]
+
+        foldata_trn = pd.DataFrame(fold_data[0])
+        foldata_trn = foldata_trn.fillna('nonna')
+        foldata_trn = foldata_trn.values
+
+        foldata_tst = pd.DataFrame(fold_data[1])
+        foldata_tst = foldata_tst.fillna('nonna')
+        foldata_tst = foldata_tst.values
+
+        trn_idxs = [np.where((ref_data == sample).all(axis=1))[0][0] for sample in foldata_trn]
+        tst_idxs = [np.where((ref_data == sample).all(axis=1))[0][0] for sample in foldata_tst]
         trn_tst_dic[key] = []
         trn_tst_dic[key].append(trn_idxs)
         trn_tst_dic[key].append(tst_idxs)
@@ -46,21 +57,26 @@ def trn_tst_idxs(ref_data, dataset):
 
 # ----------------------------------------------------------------------------------------------------------------- Main
 def main():
-    print('\033[1m' + 'Loading all the datasets...' + '\033[0m')
+    print('\033[1m' + 'Loading all the datasets...' +'\033[0m')
     arffs_dic = obtain_arffs('./datasetsSelected/')
 
     # Extract an specific database
-    dataset_name = 'grid'
+    dataset_name = 'hepatitis'
     dataset = arffs_dic[dataset_name]
 
+    # Use folder 0 of that particular dataset to find indices of train and test
     ref_data = np.concatenate((dataset[0][0], dataset[0][1]), axis=0)
-    trn_tst_dic = trn_tst_idxs(ref_data, dataset)
 
+    # --------------------------------------------------------------------------------- To compute indices for each fold
+    df_aux = pd.DataFrame(ref_data)
+    df_aux = df_aux.fillna('nonna').values
+    trn_tst_dic = trn_tst_idxs(df_aux, dataset)
+
+    # ------------------------------------------------------------------------------------------------------- Preprocess
     df1 = pd.DataFrame(ref_data)
     groundtruth_labels = df1[df1.columns[len(df1.columns) - 1]].values  # original labels in a numpy array
     df1 = df1.drop(df1.columns[len(df1.columns) - 1], 1)
 
-    # ------------------------------------------------------------------------------------------------------- Preprocess
     data1 = df1.values  # original data in a numpy array without labels
     load = Preprocess()
     data_x = load.preprocess_method(data1)
